@@ -7,9 +7,9 @@ class Rule(object):
     STANDARD_DEVIATION_RANGE = 2
     MAX_VALUE = 100
     MIN_VALUE = 0
-    cleanMax = (lambda self, x: self.MAX_VALUE if x >= self.MAX_VALUE else x)
-    cleanMin = (lambda self, x: self.MIN_VALUE if x <= self.MIN_VALUE else x)
-    clean = (lambda self, x: self.cleanMax(self.cleanMin(x)))
+    cleanMax = lambda self, x: self.MAX_VALUE if x >= self.MAX_VALUE else x
+    cleanMin = lambda self, x: self.MIN_VALUE if x <= self.MIN_VALUE else x
+    clean = lambda self, x: self.cleanMax(self.cleanMin(x))
 
     def __init__(self, average, root_mean_square_deviation):
         self.min68 = self.clean(average - root_mean_square_deviation)
@@ -21,25 +21,21 @@ class Rule(object):
 class StandardDeviation(object):
     """Standard Deviation Object"""
 
+    average = lambda self, x: np.average(x)
+    std = lambda self, n: np.sqrt(np.sum(np.square(n - self.average(n))) / len(n))
+
     def __init__(self, x, y):
         if len(x) != len(y):
             raise Exception("x length={}, y length={} is same length.".format(len(x), len(y)))
 
-        total = len(x)
         x_average = self.average(x)
         y_average = self.average(y)
 
         if x_average != y_average:
             raise Exception("x average={}, y average={} is same average.".format(x_average, y_average))
 
-        self.x_rule = Rule(x_average, self.std(x, x_average, total))
-        self.y_rule = Rule(y_average, self.std(y, y_average, total))
-
-    def average(self, n):
-        return np.average(n)
-
-    def std(self, n, average, total):
-        return np.sqrt(np.sum(np.square(n - average)) / total)
+        self.x_rule = Rule(x_average, self.std(x))
+        self.y_rule = Rule(y_average, self.std(y))
 
     def variant_printer(self):
         print "> x case: "
