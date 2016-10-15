@@ -26,16 +26,20 @@ class StandardDeviation(object):
             raise Exception("x length={}, y length={} is same length.".format(len(x), len(y)))
 
         total = len(x)
-        x_average = np.average(x)
-        y_average = np.average(y)
+        x_average = self.average(x)
+        y_average = self.average(y)
 
         if x_average != y_average:
             raise Exception("x average={}, y average={} is same average.".format(x_average, y_average))
 
-        x_root_mean_square_deviation = np.sqrt(np.sum(np.square(x - x_average)) / total)
-        y_root_mean_square_deviation = np.sqrt(np.sum(np.square(y - y_average)) / total)
-        self.x_rule = Rule(x_average, x_root_mean_square_deviation)
-        self.y_rule = Rule(y_average, y_root_mean_square_deviation)
+        self.x_rule = Rule(x_average, self.std(x, x_average, total))
+        self.y_rule = Rule(y_average, self.std(y, y_average, total))
+
+    def average(self, n):
+        return np.average(n)
+
+    def std(self, n, average, total):
+        return np.sqrt(np.sum(np.square(n - average)) / total)
 
     def variant_printer(self):
         print "> x case: "

@@ -11,6 +11,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_something(self):
         s = sd.StandardDeviation(self.TEST_CASE_X, self.TEST_CASE_Y)
+        self.assertEqual(np.std(self.TEST_CASE_X),
+                         s.std(self.TEST_CASE_X, s.average(self.TEST_CASE_X), len(self.TEST_CASE_X)))
+        self.assertEqual(np.std(self.TEST_CASE_Y),
+                         s.std(self.TEST_CASE_Y, s.average(self.TEST_CASE_Y), len(self.TEST_CASE_Y)))
         self.assertEqual(self.ANSWER_X[0], np.round(s.x_rule.min68, 1))
         self.assertEqual(self.ANSWER_X[1], np.round(s.x_rule.max68, 1))
         self.assertEqual(self.ANSWER_X[2], np.round(s.x_rule.min95, 1))
