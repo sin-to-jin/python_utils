@@ -1,0 +1,2 @@
+django==1.10.4
+selenium==3.0.2
