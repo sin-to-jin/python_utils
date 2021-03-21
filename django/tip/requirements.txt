@@ -1,5 +1,5 @@
 django==1.10.4
-requests==2.12.4
+requests==2.20.0
 beautifulsoup4==4.5.1
 selenium==3.0.2
 openpyxl==2.4.1
